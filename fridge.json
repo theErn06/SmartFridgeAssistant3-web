@@ -1,0 +1,74 @@
+{
+  "banana": {
+    "item_name": "banana",
+    "qty": 8.0,
+    "unit": "pieces",
+    "category": "fruits",
+    "expiry": "2026-03-01",
+    "status": "OK"
+  },
+  "apple": {
+    "item_name": "apple",
+    "qty": 27.0,
+    "unit": "pieces",
+    "category": "fruits",
+    "expiry": "2026-03-01",
+    "status": "OK"
+  },
+  "strawberry": {
+    "item_name": "strawberry",
+    "qty": 11.0,
+    "unit": "pieces",
+    "category": "fruits",
+    "expiry": "2026-03-01",
+    "status": "OK"
+  },
+  "mango": {
+    "item_name": "mango",
+    "qty": 1.0,
+    "unit": "pieces",
+    "category": "fruits",
+    "expiry": "2026-03-01",
+    "status": "OK"
+  },
+  "durian": {
+    "item_name": "durian",
+    "qty": 3.0,
+    "unit": "pieces",
+    "category": "fruits",
+    "expiry": "2026-03-01",
+    "status": "OK"
+  },
+  "cake": {
+    "item_name": "cake",
+    "qty": 2.0,
+    "unit": "pieces",
+    "category": "processed",
+    "expiry": "2026-03-01",
+    "status": "OK"
+  },
+  "egg": {
+    "item_name": "egg",
+    "qty": 11.0,
+    "unit": "pieces",
+    "category": "dairy",
+    "expiry": "2026-03-04",
+    "status": "OK"
+  },
+  "milk": {
+    "item_name": "milk",
+    "qty": 1.0,
+    "unit": "carton",
+    "category": "dairy",
+    "expiry": "2026-02-15",
+    "status": "EXPIRED"
+  },
+  "spinach": {
+    "item_name": "spinach",
+    "qty": 2.0,
+    "unit": "bunches",
+    "category": "vegetables",
+    "expiry": "2026-02-12",
+    "status": "EXPIRED"
+  }
+}

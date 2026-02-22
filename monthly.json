@@ -1,0 +1,16 @@
+[
+  {
+    "date_event": "2026-02-15",
+    "item": "milk",
+    "qty": 1.0,
+    "unit": "carton",
+    "status": "EXPIRED"
+  },
+  {
+    "date_event": "2026-02-12",
+    "item": "spinach",
+    "qty": 2.0,
+    "unit": "bunches",
+    "status": "EXPIRED"
+  }
+]
