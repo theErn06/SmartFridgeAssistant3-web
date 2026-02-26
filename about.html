@@ -1,0 +1,302 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Jarvis Smart Fridge - About Us</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f0f2f5;
+        margin: 0;
+        color: #333;
+      }
+      @media (min-width: 769px) {
+        body {
+          zoom: 110%;
+        }
+      }
+      #dashboard-wrapper {
+        display: flex;
+        height: 100vh;
+        overflow: hidden;
+      }
+      .sidebar {
+        width: 250px;
+        min-width: 250px;
+        flex-shrink: 0;
+        background: #2c3e50;
+        color: white;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        transition: transform 0.3s ease;
+        z-index: 1000;
+      }
+      .sidebar-header {
+        padding: 20px;
+        font-size: 20px;
+        font-weight: bold;
+        background: #1a252f;
+        text-align: center;
+        border-bottom: 1px solid #34495e;
+      }
+      .sidebar-menu {
+        display: flex;
+        flex-direction: column;
+        padding-top: 10px;
+        flex-grow: 1;
+      }
+      .sidebar-menu a {
+        padding: 15px 25px;
+        text-decoration: none;
+        font-size: 16px;
+        color: #ecf0f1;
+        display: block;
+        transition: 0.2s;
+        border-left: 4px solid transparent;
+        cursor: pointer;
+      }
+      .sidebar-menu a:hover {
+        background: #34495e;
+      }
+      .sidebar-menu a.active {
+        background: #34495e;
+        border-left-color: #3498db;
+        font-weight: bold;
+      }
+      .main-content {
+        flex-grow: 1;
+        height: 100vh;
+        overflow-y: auto;
+        background-color: #f8f9fa;
+        display: flex;
+        flex-direction: column;
+      }
+      .topbar {
+        background: white;
+        padding: 15px 25px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      }
+      .menu-toggle {
+        font-size: 24px;
+        cursor: pointer;
+        display: none;
+        background: none;
+        border: none;
+        color: #2c3e50;
+        padding: 0;
+        margin-right: 15px;
+      }
+      .topbar-left {
+        display: flex;
+        align-items: center;
+      }
+      .topbar-title {
+        margin: 0;
+        font-size: 18px;
+        color: #2c3e50;
+        font-weight: 600;
+      }
+      .danger-btn {
+        background-color: #dc3545;
+        width: auto;
+        padding: 8px 15px;
+        margin: 0;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 600;
+      }
+      .danger-btn:hover {
+        background-color: #c82333;
+      }
+      .content-container {
+        padding: 25px;
+        max-width: 1200px;
+        margin: 0 auto;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      .dashboard-view {
+        background: white;
+        padding: 25px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        animation: fadeIn 0.4s ease-in-out;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(5px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .sidebar-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+      }
+      .info-card {
+        background: #fff;
+        border: 1px solid #e0e0e0;
+        border-radius: 10px;
+        padding: 25px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+      }
+      .tech-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 15px;
+      }
+      .tag {
+        background: #e1f0fa;
+        color: #2980b9;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 600;
+      }
+      .university-badge {
+        display: inline-block;
+        background: #2c3e50;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 4px;
+        font-size: 12px;
+        letter-spacing: 1px;
+        margin-bottom: 10px;
+      }
+      @media (max-width: 768px) {
+        .sidebar {
+          position: fixed;
+          transform: translateX(-100%);
+        }
+        .sidebar.open {
+          transform: translateX(0);
+        }
+        .menu-toggle {
+          display: block;
+        }
+        .sidebar-overlay.open {
+          display: block;
+        }
+        .content-container {
+          padding: 15px;
+        }
+        .dashboard-view {
+          padding: 15px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="dashboard-wrapper">
+      <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+      <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">Jarvis</div>
+        <div class="sidebar-menu">
+          <a class="nav-link" href="inventory.html">📦 Inventory</a>
+          <a class="nav-link" href="summary.html">📊 Summary</a>
+          <a class="nav-link" href="guide.html">📖 Guide</a>
+          <a class="nav-link active" href="about.html">👨‍💻 About Us</a>
+        </div>
+      </div>
+
+      <div class="main-content">
+        <div class="topbar">
+          <div class="topbar-left">
+            <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+            <h2 class="topbar-title" id="page-title">About Us</h2>
+          </div>
+          <button class="danger-btn" onclick="logout()">Logout</button>
+        </div>
+
+        <div class="content-container">
+          <div id="about-tab" class="dashboard-view">
+            <div
+              class="info-card"
+              style="text-align: center; padding: 40px 20px"
+            >
+              <span class="university-badge">CAPSTONE PROJECT</span>
+              <h2 style="margin: 10px 0 5px 0; color: #2c3e50; font-size: 28px">
+                Smart Refrigerator Assistant
+              </h2>
+              <h4 style="margin: 0; color: #7f8c8d; font-weight: normal">
+                (Project Jarvis)
+              </h4>
+
+              <div
+                style="
+                  margin: 30px auto;
+                  max-width: 600px;
+                  text-align: left;
+                  background: #f8f9fa;
+                  padding: 20px;
+                  border-radius: 8px;
+                  border-left: 4px solid #3498db;
+                "
+              >
+                <p style="margin-top: 0; color: #444; line-height: 1.6">
+                  Developed by Year 3 students from the Bachelor of Electrical &
+                  Electronics (E&E) program at <strong>TARUMT</strong>.
+                </p>
+                <p style="margin-bottom: 0; color: #444; line-height: 1.6">
+                  This system integrates advanced Edge-LLM technology, real-time
+                  voice recognition, and custom hardware to create a seamless,
+                  voice-activated smart kitchen experience.
+                </p>
+              </div>
+
+              <div style="margin-top: 30px">
+                <h4 style="color: #2c3e50; margin-bottom: 15px">
+                  Technology Stack
+                </h4>
+                <div class="tech-tags" style="justify-content: center">
+                  <span class="tag">Edge-LLM (Ollama)</span>
+                  <span class="tag">Silero VAD</span>
+                  <span class="tag">Faster Whisper</span>
+                  <span class="tag">Python</span>
+                  <span class="tag">Arduino (C++)</span>
+                  <span class="tag">Google Apps Script</span>
+                  <span class="tag">HTML/CSS/JS</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script>
+      let currentUser = sessionStorage.getItem("currentUser");
+
+      // Route validation
+      if (!currentUser) window.location.href = "login.html";
+
+      function toggleSidebar() {
+        $("#sidebar, .sidebar-overlay").toggleClass("open");
+      }
+
+      function logout() {
+        sessionStorage.clear();
+        window.location.href = "login.html";
+      }
+    </script>
+  </body>
+</html>

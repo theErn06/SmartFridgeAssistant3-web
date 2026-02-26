@@ -1,0 +1,430 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Jarvis Smart Fridge - Inventory</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css"
+    />
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f0f2f5;
+        margin: 0;
+        color: #333;
+      }
+      @media (min-width: 769px) {
+        body {
+          zoom: 110%;
+        }
+      }
+      #dashboard-wrapper {
+        display: flex;
+        height: 100vh;
+        overflow: hidden;
+      }
+      .sidebar {
+        width: 250px;
+        min-width: 250px;
+        flex-shrink: 0;
+        background: #2c3e50;
+        color: white;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        transition: transform 0.3s ease;
+        z-index: 1000;
+      }
+      .sidebar-header {
+        padding: 20px;
+        font-size: 20px;
+        font-weight: bold;
+        background: #1a252f;
+        text-align: center;
+        border-bottom: 1px solid #34495e;
+      }
+      .sidebar-menu {
+        display: flex;
+        flex-direction: column;
+        padding-top: 10px;
+        flex-grow: 1;
+      }
+      .sidebar-menu a {
+        padding: 15px 25px;
+        text-decoration: none;
+        font-size: 16px;
+        color: #ecf0f1;
+        display: block;
+        transition: 0.2s;
+        border-left: 4px solid transparent;
+        cursor: pointer;
+      }
+      .sidebar-menu a:hover {
+        background: #34495e;
+      }
+      .sidebar-menu a.active {
+        background: #34495e;
+        border-left-color: #3498db;
+        font-weight: bold;
+      }
+      .main-content {
+        flex-grow: 1;
+        height: 100vh;
+        overflow-y: auto;
+        background-color: #f8f9fa;
+        display: flex;
+        flex-direction: column;
+      }
+      .topbar {
+        background: white;
+        padding: 15px 25px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      }
+      .menu-toggle {
+        font-size: 24px;
+        cursor: pointer;
+        display: none;
+        background: none;
+        border: none;
+        color: #2c3e50;
+        padding: 0;
+        margin-right: 15px;
+      }
+      .topbar-left {
+        display: flex;
+        align-items: center;
+      }
+      .topbar-title {
+        margin: 0;
+        font-size: 18px;
+        color: #2c3e50;
+        font-weight: 600;
+      }
+      .danger-btn {
+        background-color: #dc3545;
+        width: auto;
+        padding: 8px 15px;
+        margin: 0;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 600;
+      }
+      .danger-btn:hover {
+        background-color: #c82333;
+      }
+      .content-container {
+        padding: 25px;
+        max-width: 1200px;
+        margin: 0 auto;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      .dashboard-view {
+        background: white;
+        padding: 25px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        animation: fadeIn 0.4s ease-in-out;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(5px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .table-responsive {
+        overflow-x: auto;
+        width: 100%;
+      }
+      #inventory th,
+      #inventory td {
+        text-align: center;
+      }
+      .sidebar-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+      }
+      @media (max-width: 768px) {
+        .sidebar {
+          position: fixed;
+          transform: translateX(-100%);
+        }
+        .sidebar.open {
+          transform: translateX(0);
+        }
+        .menu-toggle {
+          display: block;
+        }
+        .sidebar-overlay.open {
+          display: block;
+        }
+        .content-container {
+          padding: 15px;
+        }
+        .dashboard-view {
+          padding: 15px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="dashboard-wrapper">
+      <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+      <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">Jarvis OS</div>
+        <div class="sidebar-menu">
+          <a class="nav-link active" href="inventory.html">📦 Inventory</a>
+          <a class="nav-link" href="summary.html">📊 Summary</a>
+          <a class="nav-link" href="guide.html">📖 Guide</a>
+          <a class="nav-link" href="about.html">👨‍💻 About Us</a>
+        </div>
+      </div>
+
+      <div class="main-content">
+        <div class="topbar">
+          <div class="topbar-left">
+            <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+            <h2 class="topbar-title" id="page-title">Live Inventory</h2>
+          </div>
+          <button class="danger-btn" onclick="logout()">Logout</button>
+        </div>
+
+        <div class="content-container">
+          <div id="inventory-tab" class="dashboard-view">
+            <div
+              style="
+                background-color: #fff3f3;
+                padding: 20px;
+                border-radius: 8px;
+                margin-bottom: 25px;
+                border-left: 5px solid #dc3545;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+              "
+            >
+              <h3
+                style="
+                  margin: 0;
+                  color: #2c3e50;
+                  font-size: 18px;
+                  font-weight: 600;
+                "
+              >
+                🚨 You wasted
+                <span
+                  id="weekly-waste-count"
+                  style="color: #dc3545; font-weight: 800; font-size: 22px"
+                  >0</span
+                >
+                items last 7 days and
+                <span
+                  id="monthly-waste-count"
+                  style="color: #dc3545; font-weight: 800; font-size: 22px"
+                  >0</span
+                >
+                items last 30 days.
+              </h3>
+            </div>
+
+            <div class="table-responsive">
+              <table id="inventory" class="display" style="width: 100%">
+                <thead>
+                  <tr>
+                    <th>Item</th>
+                    <th>Qty</th>
+                    <th>Unit</th>
+                    <th>Category</th>
+                    <th>Expiry</th>
+                    <th>Status</th>
+                    <th>Days Left</th>
+                  </tr>
+                </thead>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+
+    <script>
+      const API_URL =
+        "https://script.google.com/macros/s/AKfycbwR3LH7qkeNNNZgEhOSMFqXZcO9xyVF7DiQau7gDxcTJ6ljtgD4EwrIm8tmC-B-fMpMag/exec";
+      let currentUser = sessionStorage.getItem("currentUser");
+      let currentPass = sessionStorage.getItem("currentPass");
+
+      // Route validation
+      if (!currentUser) window.location.href = "login.html";
+
+      $(document).ready(function () {
+        loadTable();
+        loadWasteCounts(); // Fetch the summary counts on page load
+      });
+
+      function toggleSidebar() {
+        $("#sidebar, .sidebar-overlay").toggleClass("open");
+      }
+
+      function loadWasteCounts() {
+        $.ajax({
+          url: API_URL,
+          method: "POST",
+          contentType: "text/plain",
+          data: JSON.stringify({
+            action: "get_summaries",
+            username: currentUser,
+            password: currentPass,
+          }),
+          success: function (response) {
+            let json;
+            if (typeof response === "object") json = response;
+            else {
+              try {
+                json = JSON.parse(response);
+              } catch (e) {
+                json = { status: "error" };
+              }
+            }
+
+            if (json.status === "success") {
+              let weeklyData = json.weekly || [];
+              let monthlyData = json.monthly || [];
+              let weeklyTotal = weeklyData.reduce(
+                (sum, item) => sum + (Number(item.qty) || 0),
+                0,
+              );
+              let monthlyTotal = monthlyData.reduce(
+                (sum, item) => sum + (Number(item.qty) || 0),
+                0,
+              );
+
+              $("#weekly-waste-count").text(
+                Number.isInteger(weeklyTotal)
+                  ? weeklyTotal
+                  : weeklyTotal.toFixed(1),
+              );
+              $("#monthly-waste-count").text(
+                Number.isInteger(monthlyTotal)
+                  ? monthlyTotal
+                  : monthlyTotal.toFixed(1),
+              );
+            }
+          },
+        });
+      }
+
+      function loadTable() {
+        if ($.fn.DataTable.isDataTable("#inventory")) {
+          $("#inventory").DataTable().ajax.reload();
+          return;
+        }
+
+        $("#inventory").DataTable({
+          processing: true,
+          ajax: function (data, callback, settings) {
+            $.ajax({
+              url: API_URL,
+              method: "POST",
+              contentType: "text/plain",
+              data: JSON.stringify({
+                action: "get_inventory",
+                username: currentUser,
+                password: currentPass,
+              }),
+              success: function (response) {
+                let json;
+                if (typeof response === "object") json = response;
+                else {
+                  try {
+                    json = JSON.parse(response);
+                  } catch (e) {
+                    json = { data: [] };
+                  }
+                }
+
+                if (json.error) {
+                  alert(json.error);
+                  logout();
+                } else {
+                  callback({ data: json.data || [] });
+                }
+              },
+              error: function () {
+                alert("Failed to load inventory.");
+                callback({ data: [] });
+              },
+            });
+          },
+          columns: [
+            {
+              data: "item_name",
+              defaultContent: "-",
+              render: (d) =>
+                String(d).charAt(0).toUpperCase() + String(d).slice(1),
+            },
+            { data: "qty", defaultContent: "0" },
+            {
+              data: "unit",
+              defaultContent: "-",
+              render: (d) =>
+                String(d).charAt(0).toUpperCase() + String(d).slice(1),
+            },
+            {
+              data: "category",
+              defaultContent: "-",
+              render: (d) =>
+                String(d).charAt(0).toUpperCase() + String(d).slice(1),
+            },
+            {
+              data: "expiry",
+              defaultContent: "-",
+              render: (d) =>
+                d === "N/A" || d === "-"
+                  ? "N/A"
+                  : moment(d).format("YYYY-MM-DD"),
+            },
+            { data: "status", defaultContent: "N/A" },
+            {
+              data: "days_left",
+              defaultContent: "N/A",
+              render: function (data) {
+                if (data === "N/A" || data === null || data === "")
+                  return "N/A";
+                let days = parseInt(data);
+                if (isNaN(days)) return data;
+                if (days < 0)
+                  return `<span style="color: #dc3545; font-weight: bold;">Expired ${Math.abs(days)} days ago</span>`;
+                return days;
+              },
+            },
+          ],
+        });
+      }
+
+      function logout() {
+        sessionStorage.clear();
+        window.location.href = "login.html";
+      }
+    </script>
+  </body>
+</html>
