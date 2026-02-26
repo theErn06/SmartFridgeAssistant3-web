@@ -21,6 +21,7 @@ Summary page shows the summary daya (food wasted) and all the foods or items tha
 The count is based on the food quantity e.g 2 apples and 1 milk expired 3 days ago and 34 days ago: 2 foods wasted last 7 days and 3 foods wasted last 30 days.
 
 The following shows the typical shelf life that Jarvis can understand. (In Terms of Days)
+
 SHELF_LIFE_RULES = {
     "protein": 4, "seafood": 7, "dairy": 10, 
     "vegetables": 7, "fruits": 7, "grains": 14,       
